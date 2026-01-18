@@ -189,6 +189,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
 ]
 
+# Permettre aussi les domaines depuis les variables d'environnement (Vercel, etc.)
+cors_origins_env = config('CORS_ALLOWED_ORIGINS', default='')
+if cors_origins_env:
+    CORS_ALLOWED_ORIGINS.extend([origin.strip() for origin in cors_origins_env.split(',') if origin.strip()])
+
 CORS_ALLOW_CREDENTIALS = True
 
 # Email configuration (pour le formulaire de contact)
