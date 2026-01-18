@@ -71,11 +71,10 @@ const ProjectCard = ({ project, isFrench }) => {
               href={project.demo_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="project-link"
+              className="project-link project-link-demo"
               aria-label="View demo"
             >
-              <Play size={18} />
-              {isFrench ? 'Démo' : 'Demo'}
+              {isFrench ? 'Voir la démo' : 'View demo'}
             </a>
           )}
           {project.github_url && (
@@ -83,7 +82,7 @@ const ProjectCard = ({ project, isFrench }) => {
               href={project.github_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="project-link"
+              className="project-link project-link-code"
               aria-label="View code"
             >
               <GithubIcon size={18} />

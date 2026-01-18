@@ -73,10 +73,13 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
   min-width: 0;
   box-sizing: border-box;
   width: 100%;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .project-content h3 {
@@ -92,7 +95,10 @@
   flex: 1;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  word-break: break-word;
+  word-break: break-all;
+  hyphens: auto;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .project-content a {
@@ -121,23 +127,22 @@
 
 .project-actions {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   margin-top: auto;
-  flex-wrap: wrap;
   width: 100%;
   box-sizing: border-box;
 }
 
 .project-actions .project-link {
-  flex: 0 1 calc(50% - var(--spacing-md) / 2);
+  flex: 1 1 0;
   min-width: 0;
-  max-width: calc(50% - var(--spacing-md) / 2);
   box-sizing: border-box;
 }
 
 .project-link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-md);
   background: var(--color-primary);
@@ -150,9 +155,14 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
   box-sizing: border-box;
-  flex-shrink: 1;
+  text-align: center;
+}
+
+.project-link svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
 }
 
 .project-link:hover {
