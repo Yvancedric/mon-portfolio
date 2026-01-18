@@ -73,6 +73,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .project-content h3 {
@@ -120,15 +124,19 @@
   gap: var(--spacing-md);
   margin-top: auto;
   flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .project-actions .project-link {
-  flex: 0 1 auto;
+  flex: 0 1 calc(50% - var(--spacing-md) / 2);
   min-width: 0;
+  max-width: calc(50% - var(--spacing-md) / 2);
+  box-sizing: border-box;
 }
 
 .project-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -143,6 +151,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 1;
 }
 
 .project-link:hover {
