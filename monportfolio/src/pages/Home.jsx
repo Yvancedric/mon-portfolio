@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight, Download, GithubIcon, Linkedin, Mail, Code, Briefcase, Award, Users } from 'lucide-react'
+import { ArrowRight, Mail, Phone, MapPin, Facebook, Twitter, Instagram, ChevronDown } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
 import { portfolioAPI } from '../services/api'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -12,14 +12,13 @@ import '../styles/Home.css'
 const Home = () => {
   const [settings, setSettings] = useState(null)
   const [featuredProjects, setFeaturedProjects] = useState([])
-  const [stats, setStats] = useState({ projects: 0, skills: 0, experiences: 0 })
   const [loading, setLoading] = useState(true)
   const { isFrench } = useLanguage()
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [settingsRes, projectsRes, skillsRes, experiencesRes] = await Promise.all([
+        const [settingsRes, projectsRes] = await Promise.all([
           portfolioAPI.getSettings().catch((err) => {
             console.warn('Settings API error:', err.response?.status || err.message)
             return { data: null }
@@ -28,35 +27,10 @@ const Home = () => {
             console.warn('Featured Projects API error:', err.response?.status || err.message)
             return { data: { results: [] } }
           }),
-          portfolioAPI.getSkills().catch((err) => {
-            console.warn('Skills API error:', err.response?.status || err.message)
-            return { data: { results: [] } }
-          }),
-          portfolioAPI.getExperiences().catch((err) => {
-            console.warn('Experiences API error:', err.response?.status || err.message)
-            return { data: { results: [] } }
-          }),
         ])
 
         setSettings(settingsRes.data)
         setFeaturedProjects(projectsRes.data.results || projectsRes.data || [])
-        
-        // Debug: afficher les données reçues
-        console.log('Données reçues:', {
-          projects: projectsRes.data,
-          skills: skillsRes.data,
-          experiences: experiencesRes.data,
-        })
-        
-        const projectsCount = projectsRes.data.results?.length || projectsRes.data?.length || 0
-        const skillsCount = skillsRes.data.results?.length || skillsRes.data?.length || 0
-        const experiencesCount = experiencesRes.data.results?.length || experiencesRes.data?.length || 0
-        
-        setStats({
-          projects: projectsCount,
-          skills: skillsCount,
-          experiences: experiencesCount,
-        })
       } catch (error) {
         console.error('Error fetching data:', error)
       } finally {
@@ -66,236 +40,211 @@ const Home = () => {
     fetchData()
   }, [])
 
+
   if (loading) {
     return <LoadingSpinner />
   }
 
-  const ownerName = settings?.owner_name || 'YvanCedric'
-  const ownerTitle = isFrench 
-    ? (settings?.owner_title_fr || 'Développeur Full Stack') 
-    : (settings?.owner_title_en || 'Full Stack Developer')
-  const ownerBio = isFrench 
-    ? (settings?.owner_bio_fr || 'Passionné par le développement web et les technologies modernes. Je crée des applications web performantes et intuitives.')
-    : (settings?.owner_bio_en || 'Passionate about web development and modern technologies. I create performant and intuitive web applications.')
-  const ownerPhoto = settings?.owner_photo_url
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
+  const services = [
+    {
+      title: isFrench ? 'Développement Web' : 'Web Development',
+      description: isFrench ? 'Création de sites web modernes et performants' : 'Creating modern and performant websites',
+      image: '/api/placeholder/400/300'
     },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut',
-      },
+    {
+      title: isFrench ? 'UI/UX Design' : 'UI/UX Design',
+      description: isFrench ? 'Design d\'interfaces utilisateur intuitives et attrayantes' : 'Intuitive and attractive user interface design',
+      image: '/api/placeholder/400/300'
     },
-  }
+    {
+      title: isFrench ? 'Maintenance' : 'Maintenance',
+      description: isFrench ? 'Maintenance et support technique pour vos applications' : 'Maintenance and technical support for your applications',
+      image: '/api/placeholder/400/300'
+    },
+    {
+      title: isFrench ? 'E-commerce' : 'E-commerce',
+      description: isFrench ? 'Solutions e-commerce sur mesure pour votre business' : 'Custom e-commerce solutions for your business',
+      image: '/api/placeholder/400/300'
+    },
+    {
+      title: isFrench ? 'API Development' : 'API Development',
+      description: isFrench ? 'Création d\'APIs RESTful et GraphQL robustes' : 'Creating robust RESTful and GraphQL APIs',
+      image: '/api/placeholder/400/300'
+    },
+    {
+      title: isFrench ? 'Optimisation SEO' : 'SEO Optimization',
+      description: isFrench ? 'Optimisation pour les moteurs de recherche' : 'Search engine optimization',
+      image: '/api/placeholder/400/300'
+    }
+  ]
+
+  const howItWorks = [
+    {
+      number: '1',
+      title: isFrench ? 'Prenez contact' : 'Get in touch',
+      description: isFrench 
+        ? 'Contactez-moi pour discuter de votre projet et de vos besoins spécifiques.'
+        : 'Contact me to discuss your project and specific needs.'
+    },
+    {
+      number: '2',
+      title: isFrench ? 'Analyse du projet' : 'Project analysis',
+      description: isFrench
+        ? 'J\'analyse vos besoins et propose une solution adaptée à vos objectifs.'
+        : 'I analyze your needs and propose a solution adapted to your objectives.'
+    },
+    {
+      number: '3',
+      title: isFrench ? 'Développement' : 'Development',
+      description: isFrench
+        ? 'Je développe votre projet en suivant les meilleures pratiques et standards.'
+        : 'I develop your project following best practices and standards.'
+    },
+    {
+      number: '4',
+      title: isFrench ? 'Livraison & Support' : 'Delivery & Support',
+      description: isFrench
+        ? 'Je livre votre projet et assure un support continu pour son évolution.'
+        : 'I deliver your project and provide ongoing support for its evolution.'
+    }
+  ]
 
   return (
     <>
       <SEO
         title={isFrench ? 'Accueil' : 'Home'}
-        description={ownerBio}
+        description={isFrench ? 'Portfolio de YvanCedric - Développeur Full Stack' : 'YvanCedric Portfolio - Full Stack Developer'}
       />
 
-      <section className="hero section">
-        <div className="container">
+      {/* Hero Banner Section */}
+      <section className="hero-banner">
+        <div className="hero-overlay"></div>
+        <div className="hero-wrapper">
+          <motion.div
+            className="hero-image-container"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            {settings?.owner_photo_url ? (
+              <img 
+                src={settings.owner_photo_url} 
+                alt={settings.owner_name || 'Portfolio'} 
+                className="hero-photo"
+              />
+            ) : (
+              <div className="hero-photo-placeholder">
+                <span>{(settings?.owner_name || 'YC').charAt(0)}</span>
+              </div>
+            )}
+          </motion.div>
           <motion.div
             className="hero-content"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            <motion.div className="hero-text" variants={itemVariants}>
-              <motion.div
-                className="hero-greeting"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                {isFrench ? 'Bonjour, je suis' : 'Hello, I am'}
-              </motion.div>
-              <motion.h1
-                className="hero-name"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-              >
-                {ownerName}
-              </motion.h1>
-              <motion.h2
-                className="hero-title"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-              >
-                {ownerTitle}
-              </motion.h2>
-              <motion.p
-                className="hero-description"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-              >
-                {ownerBio}
-              </motion.p>
-
-              <motion.div
-                className="hero-actions"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 }}
-              >
-                <Link to="/mes-projects" className="btn btn-primary">
-                  {isFrench ? 'Voir mes projets' : 'View my projects'}
-                  <ArrowRight size={18} />
-                </Link>
-                <Link to="/contact" className="btn btn-secondary">
-                  {isFrench ? 'Me contacter' : 'Contact me'}
-                </Link>
-                {settings?.cv_file_url && (
-                  <a
-                    href={settings.cv_file_url}
-                    download
-                    className="btn btn-outline"
-                  >
-                    <Download size={18} />
-                    {isFrench ? 'Télécharger CV' : 'Download CV'}
-                  </a>
-                )}
-              </motion.div>
-
-              <motion.div
-                className="hero-social"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.2 }}
-              >
-                {settings?.github_url && (
-                  <a
-                    href={settings.github_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="GitHub"
-                    className="social-icon"
-                  >
-                    <GithubIcon size={24} />
-                  </a>
-                )}
-                {settings?.linkedin_url && (
-                  <a
-                    href={settings.linkedin_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                    className="social-icon"
-                  >
-                    <Linkedin size={24} />
-                  </a>
-                )}
-                {settings?.owner_email && (
-                  <a
-                    href={`mailto:${settings.owner_email}`}
-                    aria-label="Email"
-                    className="social-icon"
-                  >
-                    <Mail size={24} />
-                  </a>
-                )}
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              className="hero-image"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-            >
-              {ownerPhoto ? (
-                <img
-                  src={ownerPhoto}
-                  alt={ownerName}
-                  className="profile-image"
-                />
-              ) : (
-                <div className="profile-placeholder">
-                  <span>{ownerName.charAt(0)}</span>
-                </div>
-              )}
-            </motion.div>
+            <h1 className="hero-title">
+              {isFrench ? 'Choisissez l\'excellence' : 'Choose Excellence'}
+            </h1>
+            <p className="hero-subtitle">
+              {isFrench
+                ? 'Je crée des solutions web modernes et performantes qui transforment vos idées en réalité numérique. Spécialisé en développement full stack, je combine créativité et expertise technique pour livrer des projets d\'exception.'
+                : 'I create modern and performant web solutions that transform your ideas into digital reality. Specialized in full stack development, I combine creativity and technical expertise to deliver exceptional projects.'}
+            </p>
+            <Link to="/contact" className="btn-hero">
+              {isFrench ? 'ME CONTACTER' : 'CONTACT ME'}
+            </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* Section Statistiques */}
-      <section className="stats section">
+      {/* Services Grid Section */}
+      <section className="services-section section">
         <div className="container">
           <motion.div
-            className="section-title"
+            className="section-header"
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
           >
-            <h2>{isFrench ? 'Statistiques' : 'Statistics'}</h2>
+            <h2>{isFrench ? 'Nos Services' : 'Our Services'}</h2>
             <p>
               {isFrench
-                ? 'Mes réalisations en chiffres'
-                : 'My achievements in numbers'}
+                ? 'Des solutions complètes pour tous vos besoins numériques'
+                : 'Complete solutions for all your digital needs'}
             </p>
           </motion.div>
-          <motion.div
-            className="stats-grid"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-          >
-            <motion.div className="stat-card" variants={itemVariants}>
-              <div className="stat-icon">
-                <Briefcase size={32} />
-              </div>
-              <h3 className="stat-number">{stats.projects}+</h3>
-              <p className="stat-label">{isFrench ? 'Projets' : 'Projects'}</p>
-            </motion.div>
-            <motion.div className="stat-card" variants={itemVariants}>
-              <div className="stat-icon">
-                <Code size={32} />
-              </div>
-              <h3 className="stat-number">{stats.skills}+</h3>
-              <p className="stat-label">{isFrench ? 'Compétences' : 'Skills'}</p>
-            </motion.div>
-            <motion.div className="stat-card" variants={itemVariants}>
-              <div className="stat-icon">
-                <Award size={32} />
-              </div>
-              <h3 className="stat-number">{stats.experiences}+</h3>
-              <p className="stat-label">{isFrench ? 'Expériences' : 'Experiences'}</p>
-            </motion.div>
-          </motion.div>
+          <div className="services-grid">
+            {services.map((service, index) => (
+              <motion.div
+                key={index}
+                className="service-card"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <div className="service-image">
+                  <img src={service.image} alt={service.title} />
+                </div>
+                <div className="service-content">
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Section Projets en vedette */}
+      {/* How It Works Section */}
+      <section className="how-it-works-section section">
+        <div className="container">
+          <motion.div
+            className="section-header"
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2>{isFrench ? 'Comment ça fonctionne' : 'Here\'s How It Works'}</h2>
+            <p>
+              {isFrench
+                ? 'Un processus simple et efficace pour transformer vos idées en réalité'
+                : 'A simple and efficient process to transform your ideas into reality'}
+            </p>
+          </motion.div>
+          <div className="how-it-works-grid">
+            {howItWorks.map((step, index) => (
+              <motion.div
+                key={index}
+                className="how-it-works-card"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <div className="step-number">{step.number}</div>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+                <button className="btn-more">
+                  {isFrench ? 'En savoir plus' : 'More'} <ChevronDown size={16} />
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Projects Section */}
       {featuredProjects.length > 0 && (
         <section className="featured-projects section">
           <div className="container">
             <motion.div
-              className="section-title"
+              className="section-header"
               initial={{ opacity: 0, y: -20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
             >
               <h2>{isFrench ? 'Projets en vedette' : 'Featured Projects'}</h2>
               <p>
@@ -304,42 +253,21 @@ const Home = () => {
                   : 'Discover some of my recent projects'}
               </p>
             </motion.div>
-
-            <motion.div
-              className="projects-grid"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.1,
-                  },
-                },
-              }}
-            >
+            <div className="projects-grid">
               {featuredProjects.slice(0, 3).map((project) => (
                 <ProjectCard key={project.id} project={project} isFrench={isFrench} />
               ))}
-            </motion.div>
-
-            <motion.div
-              className="section-cta"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-            >
-              <Link to="/mes-projects" className="btn btn-primary">
+            </div>
+            <div className="section-cta">
+              <Link to="/mes-projects" className="btn-primary">
                 {isFrench ? 'Voir tous les projets' : 'View all projects'}
                 <ArrowRight size={18} />
               </Link>
-            </motion.div>
+            </div>
           </div>
         </section>
       )}
+
     </>
   )
 }

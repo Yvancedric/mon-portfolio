@@ -1,42 +1,25 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { useLanguage } from '../hooks/useLanguage'
 import { portfolioAPI } from '../services/api'
 import LoadingSpinner from '../components/LoadingSpinner'
-import SkillCard from '../components/SkillCard'
-import ExperienceTimeline from '../components/ExperienceTimeline'
 import SEO from '../components/SEO'
 import '../styles/About.css'
 
 const About = () => {
   const [settings, setSettings] = useState(null)
-  const [skills, setSkills] = useState([])
-  const [skillCategories, setSkillCategories] = useState([])
-  const [experiences, setExperiences] = useState([])
   const [loading, setLoading] = useState(true)
   const { isFrench } = useLanguage()
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [settingsRes, skillsRes, categoriesRes, experiencesRes] = await Promise.all([
-          portfolioAPI.getSettings().catch(() => ({ data: null })),
-          portfolioAPI.getSkills().catch(() => ({ data: { results: [] } })),
-          portfolioAPI.getSkillCategories().catch(() => ({ data: { results: [] } })),
-          portfolioAPI.getExperiences().catch(() => ({ data: { results: [] } })),
-        ])
-
+        const settingsRes = await portfolioAPI.getSettings().catch(() => ({ data: null }))
         setSettings(settingsRes.data)
-        setSkills(skillsRes.data.results || skillsRes.data || [])
-        setSkillCategories(categoriesRes.data.results || categoriesRes.data || [])
-        setExperiences(experiencesRes.data.results || experiencesRes.data || [])
       } catch (error) {
         console.error('Error fetching data:', error)
-        // Définir des valeurs par défaut en cas d'erreur
         setSettings(null)
-        setSkills([])
-        setSkillCategories([])
-        setExperiences([])
       } finally {
         setLoading(false)
       }
@@ -49,16 +32,8 @@ const About = () => {
   }
 
   const ownerBio = isFrench ? settings?.owner_bio_fr : settings?.owner_bio_en
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  }
+  const ownerName = settings?.owner_name || 'YvanCedric'
+  const ownerPhoto = settings?.owner_photo_url
 
   return (
     <>
@@ -67,58 +42,70 @@ const About = () => {
         description={ownerBio}
       />
 
-      <section className="about section">
+      <section className="about-page">
         <div className="container">
-          <motion.div
-            className="section-title"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2>{isFrench ? 'À propos de moi' : 'About me'}</h2>
-          </motion.div>
+          <div className="about-content-wrapper">
+            {/* Left Section - Image/Product Display */}
+            <motion.div
+              className="about-image-section"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="about-image-container">
+                {ownerPhoto ? (
+                  <img src={ownerPhoto} alt={ownerName} className="about-main-image" />
+                ) : (
+                  <div className="about-placeholder-image">
+                    <span>{ownerName.charAt(0)}</span>
+                  </div>
+                )}
+                
+                {/* Callout Box 1 - Stats */}
+                <div className="about-callout about-callout-1">
+                  <p className="callout-label">{isFrench ? 'Membres mensuels' : 'Monthly Members'}</p>
+                  <p className="callout-value">5000+</p>
+                </div>
 
-          <motion.div
-            className="about-content"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.div className="about-bio" variants={containerVariants}>
-              <h3>{isFrench ? 'Biographie' : 'Biography'}</h3>
-              <p>{ownerBio}</p>
+                {/* Callout Box 2 - Reviews */}
+                <div className="about-callout about-callout-2">
+                  <div className="callout-avatars">
+                    <div className="avatar"></div>
+                    <div className="avatar"></div>
+                    <div className="avatar"></div>
+                  </div>
+                  <p className="callout-value">8000+ {isFrench ? 'avis' : 'reviews'}</p>
+                </div>
+              </div>
             </motion.div>
 
-            {skillCategories.length > 0 && (
-              <motion.div className="skills-section" variants={containerVariants}>
-                <h3>{isFrench ? 'Compétences' : 'Skills'}</h3>
-                <div className="skills-grid">
-                  {skillCategories.map((category) => {
-                    const categorySkills = skills.filter(
-                      (skill) => skill.category?.id === category.id
-                    )
-                    if (categorySkills.length === 0) return null
+            {/* Right Section - Text Content */}
+            <motion.div
+              className="about-text-section"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <h1 className="about-title">{isFrench ? 'À propos de nous' : 'About Us'}</h1>
+              
+              <div className="about-description">
+                <p>
+                  {isFrench
+                    ? `Bienvenue sur le portfolio de ${ownerName}. Je suis un développeur full stack passionné créant des solutions web modernes et performantes qui transforment vos idées en réalité numérique. Je combine créativité et expertise technique pour livrer des projets d'exception.`
+                    : `Welcome to ${ownerName}'s portfolio. I am a passionate full stack developer creating modern and performant web solutions that transform your ideas into digital reality. I combine creativity and technical expertise to deliver exceptional projects.`}
+                </p>
+                <p>
+                  {isFrench
+                    ? 'Je sélectionne tous mes projets, y compris mes applications web, applications mobiles et solutions UI/UX, en utilisant des technologies modernes et des meilleures pratiques pour garantir des résultats de qualité supérieure.'
+                    : 'I curate all my projects, including my web applications, mobile apps, and UI/UX solutions, using modern technologies and best practices to ensure superior quality results.'}
+                </p>
+              </div>
 
-                    return (
-                      <SkillCard
-                        key={category.id}
-                        category={category}
-                        skills={categorySkills}
-                        isFrench={isFrench}
-                      />
-                    )
-                  })}
-                </div>
-              </motion.div>
-            )}
-
-            {experiences.length > 0 && (
-              <motion.div className="experiences-section" variants={containerVariants}>
-                <h3>{isFrench ? 'Parcours' : 'Experience'}</h3>
-                <ExperienceTimeline experiences={experiences} isFrench={isFrench} />
-              </motion.div>
-            )}
-          </motion.div>
+              <Link to="/mes-projects" className="about-explore-btn">
+                {isFrench ? 'EXPLORER' : 'EXPLORE'}
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </section>
     </>

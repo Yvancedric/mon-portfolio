@@ -26,7 +26,7 @@ const ContactForm = ({ onSubmit, isFrench }) => {
     }
 
     if (!formData.subject.trim()) {
-      newErrors.subject = isFrench ? 'L\'objet est requis' : 'Subject is required'
+      newErrors.subject = isFrench ? 'Le sujet est requis' : 'Subject is required'
     }
 
     if (!formData.message.trim()) {
@@ -75,84 +75,72 @@ const ContactForm = ({ onSubmit, isFrench }) => {
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
       <div className="form-group">
-        <label htmlFor="name">
-          {isFrench ? 'Nom' : 'Name'} <span className="required">*</span>
-        </label>
         <input
           type="text"
           id="name"
           name="name"
           value={formData.name}
           onChange={handleChange}
+          placeholder={isFrench ? 'Votre nom' : 'Your Name'}
           className={errors.name ? 'error' : ''}
           aria-invalid={!!errors.name}
-          aria-describedby={errors.name ? 'name-error' : undefined}
         />
         {errors.name && (
-          <span id="name-error" className="error-message" role="alert">
+          <span className="error-message" role="alert">
             {errors.name}
           </span>
         )}
       </div>
 
       <div className="form-group">
-        <label htmlFor="email">
-          {isFrench ? 'Email' : 'Email'} <span className="required">*</span>
-        </label>
         <input
           type="email"
           id="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
+          placeholder={isFrench ? 'Votre email' : 'Your Email'}
           className={errors.email ? 'error' : ''}
           aria-invalid={!!errors.email}
-          aria-describedby={errors.email ? 'email-error' : undefined}
         />
         {errors.email && (
-          <span id="email-error" className="error-message" role="alert">
+          <span className="error-message" role="alert">
             {errors.email}
           </span>
         )}
       </div>
 
       <div className="form-group">
-        <label htmlFor="subject">
-          {isFrench ? 'Objet' : 'Subject'} <span className="required">*</span>
-        </label>
         <input
           type="text"
           id="subject"
           name="subject"
           value={formData.subject}
           onChange={handleChange}
+          placeholder={isFrench ? 'Sujet' : 'Subject'}
           className={errors.subject ? 'error' : ''}
           aria-invalid={!!errors.subject}
-          aria-describedby={errors.subject ? 'subject-error' : undefined}
         />
         {errors.subject && (
-          <span id="subject-error" className="error-message" role="alert">
+          <span className="error-message" role="alert">
             {errors.subject}
           </span>
         )}
       </div>
 
       <div className="form-group">
-        <label htmlFor="message">
-          {isFrench ? 'Message' : 'Message'} <span className="required">*</span>
-        </label>
         <textarea
           id="message"
           name="message"
           rows="6"
           value={formData.message}
           onChange={handleChange}
+          placeholder={isFrench ? 'Tapez votre message ici.....' : 'Typing your massage here.....'}
           className={errors.message ? 'error' : ''}
           aria-invalid={!!errors.message}
-          aria-describedby={errors.message ? 'message-error' : undefined}
         />
         {errors.message && (
-          <span id="message-error" className="error-message" role="alert">
+          <span className="error-message" role="alert">
             {errors.message}
           </span>
         )}
@@ -176,7 +164,7 @@ const ContactForm = ({ onSubmit, isFrench }) => {
         ) : (
           <>
             <Send size={18} />
-            {isFrench ? 'Envoyer' : 'Send'}
+            {isFrench ? 'ENVOYER' : 'SEND'}
           </>
         )}
       </button>

@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { GithubIcon, Play } from 'lucide-react'
 import '../styles/ProjectCard.css'
 
 const ProjectCard = ({ project, isFrench }) => {
@@ -64,32 +63,6 @@ const ProjectCard = ({ project, isFrench }) => {
             )}
           </div>
         )}
-
-        <div className="project-actions">
-          {project.demo_url && (
-            <a
-              href={project.demo_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="project-link project-link-demo"
-              aria-label="View demo"
-            >
-              {isFrench ? 'Voir la démo' : 'View demo'}
-            </a>
-          )}
-          {project.github_url && (
-            <a
-              href={project.github_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="project-link project-link-code"
-              aria-label="View code"
-            >
-              <GithubIcon size={18} />
-              {isFrench ? 'Code' : 'Code'}
-            </a>
-          )}
-        </div>
       </div>
     </motion.div>
   )

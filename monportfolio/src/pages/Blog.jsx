@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Calendar, Clock, ArrowRight } from 'lucide-react'
+import { Calendar, ArrowRight } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
 import { portfolioAPI } from '../services/api'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -29,17 +29,22 @@ const Blog = () => {
   }, [])
 
   const formatDate = (dateString) => {
+    if (!dateString) return ''
     const date = new Date(dateString)
     return date.toLocaleDateString(isFrench ? 'fr-FR' : 'en-US', {
       year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     })
   }
 
   if (loading) {
     return <LoadingSpinner />
   }
+
+  // Main articles (first 2) and sidebar articles (next 4)
+  const mainArticles = articles.slice(0, 2)
+  const sidebarArticles = articles.slice(2, 6)
 
   return (
     <>
@@ -48,91 +53,118 @@ const Blog = () => {
         description={isFrench ? 'Articles et publications' : 'Articles and publications'}
       />
 
-      <section className="blog section">
+      <section className="blog-page">
         <div className="container">
-          <motion.div
-            className="section-title"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2>{isFrench ? 'Blog' : 'Blog'}</h2>
-            <p>
-              {isFrench
-                ? 'Découvrez mes articles et publications'
-                : 'Discover my articles and publications'}
-            </p>
-          </motion.div>
+          {/* Header */}
+          <div className="blog-header">
+            <h1 className="blog-title">
+              {isFrench ? 'Nos derniers articles de blog' : 'Our Latest Blog Posts'}
+            </h1>
+            <Link to="/blog" className="blog-see-all-btn">
+              {isFrench ? 'Voir tous les articles' : 'See All Blog Posts'}
+            </Link>
+          </div>
 
-          {articles.length > 0 ? (
-            <motion.div
-              className="articles-grid"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.1,
-                  },
-                },
-              }}
-            >
-              {articles.map((article) => (
-                <motion.article
-                  key={article.id}
-                  className="article-card"
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                  whileHover={{ y: -5 }}
-                >
-                  {article.featured_image_url && (
-                    <div className="article-image">
-                      <img
-                        src={article.featured_image_url}
-                        alt={isFrench ? article.title_fr : article.title_en}
-                      />
-                      {article.featured && (
-                        <span className="article-featured">
-                          {isFrench ? 'Vedette' : 'Featured'}
-                        </span>
+          <div className="blog-content">
+            {/* Left - Main Articles (2 large cards) */}
+            <div className="blog-main">
+              {mainArticles.length > 0 ? (
+                <div className="blog-main-grid">
+                  {mainArticles.map((article) => (
+                    <motion.article
+                      key={article.id}
+                      className="blog-main-card"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <div className="blog-main-image">
+                        {article.featured_image_url ? (
+                          <img
+                            src={article.featured_image_url}
+                            alt={isFrench ? article.title_fr : article.title_en}
+                          />
+                        ) : (
+                          <div className="blog-placeholder">
+                            <span>{(isFrench ? article.title_fr : article.title_en)?.charAt(0) || 'B'}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="blog-main-content">
+                        <div className="blog-meta">
+                          <span className="blog-date">
+                            {formatDate(article.published_at || article.created_at)}
+                          </span>
+                          <span className="blog-category">
+                            {article.category
+                              ? isFrench
+                                ? article.category.name_fr
+                                : article.category.name_en
+                              : 'Category'}
+                          </span>
+                        </div>
+                        <h3 className="blog-main-title">
+                          {isFrench ? article.title_fr : article.title_en}
+                        </h3>
+                        <p className="blog-main-excerpt">
+                          {isFrench ? article.excerpt_fr : article.excerpt_en}
+                        </p>
+                      </div>
+                    </motion.article>
+                  ))}
+                </div>
+              ) : (
+                <div className="no-articles">
+                  <p>{isFrench ? 'Aucun article disponible' : 'No articles available'}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Right - Sidebar Articles */}
+            {sidebarArticles.length > 0 && (
+              <div className="blog-sidebar">
+                {sidebarArticles.map((article) => (
+                  <motion.article
+                    key={article.id}
+                    className="blog-sidebar-item"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <div className="blog-sidebar-image">
+                      {article.featured_image_url ? (
+                        <img
+                          src={article.featured_image_url}
+                          alt={isFrench ? article.title_fr : article.title_en}
+                        />
+                      ) : (
+                        <div className="blog-sidebar-placeholder">
+                          <span>{(isFrench ? article.title_fr : article.title_en)?.charAt(0) || 'A'}</span>
+                        </div>
                       )}
                     </div>
-                  )}
-                  <div className="article-content">
-                    {article.category && (
-                      <span className="article-category">
-                        {isFrench ? article.category.name_fr : article.category.name_en}
-                      </span>
-                    )}
-                    <h3>{isFrench ? article.title_fr : article.title_en}</h3>
-                    <p>{isFrench ? article.excerpt_fr : article.excerpt_en}</p>
-                    <div className="article-meta">
-                      <span className="article-date">
-                        <Calendar size={16} />
-                        {formatDate(article.published_at || article.created_at)}
-                      </span>
-                      <span className="article-views">
-                        <Clock size={16} />
-                        {article.views_count} {isFrench ? 'vues' : 'views'}
-                      </span>
+                    <div className="blog-sidebar-content">
+                      <div className="blog-sidebar-meta">
+                        <span className="blog-date">
+                          {formatDate(article.published_at || article.created_at)}
+                        </span>
+                        <span className="blog-category">
+                          {article.category
+                            ? isFrench
+                              ? article.category.name_fr
+                              : article.category.name_en
+                            : 'Category'}
+                        </span>
+                      </div>
+                      <h4 className="blog-sidebar-title">
+                        {isFrench ? article.title_fr : article.title_en}
+                      </h4>
                     </div>
-                    <Link to={`/blog/${article.slug}`} className="article-link">
-                      {isFrench ? 'Lire la suite' : 'Read more'}
-                      <ArrowRight size={16} />
-                    </Link>
-                  </div>
-                </motion.article>
-              ))}
-            </motion.div>
-          ) : (
-            <div className="no-articles">
-              <p>{isFrench ? 'Aucun article disponible' : 'No articles available'}</p>
-            </div>
-          )}
+                  </motion.article>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </section>
     </>
