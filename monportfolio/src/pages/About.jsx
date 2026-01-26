@@ -96,7 +96,7 @@ const About = () => {
                 </p>
                 <p>
                   {isFrench
-                    ? 'Je sélectionne tous mes projets, y compris mes applications web, applications mobiles et solutions UI/UX, en utilisant des technologies modernes et des meilleures pratiques pour garantir des résultats de qualité supérieure.'
+                    ? 'Je sélectionne tous mes projets, y compris mes applications web et solutions UI/UX, en utilisant des technologies modernes et des meilleures pratiques pour garantir des résultats de qualité supérieure.'
                     : 'I curate all my projects, including my web applications, mobile apps, and UI/UX solutions, using modern technologies and best practices to ensure superior quality results.'}
                 </p>
               </div>
