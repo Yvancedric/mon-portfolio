@@ -54,7 +54,7 @@ const Home = () => {
     {
       title: isFrench ? 'UI/UX Design' : 'UI/UX Design',
       description: isFrench ? 'Design d\'interfaces utilisateur intuitives et attrayantes' : 'Intuitive and attractive user interface design',
-      image: '/images/devops.jpg'
+      image: '/images/uidesign.jpg'
     },
     {
       title: isFrench ? 'Maintenance' : 'Maintenance',
