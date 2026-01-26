@@ -49,32 +49,32 @@ const Home = () => {
     {
       title: isFrench ? 'Développement Web' : 'Web Development',
       description: isFrench ? 'Création de sites web modernes et performants' : 'Creating modern and performant websites',
-      image: '/api/placeholder/400/300'
+      image: '/images/codeweb.jpg'
     },
     {
       title: isFrench ? 'UI/UX Design' : 'UI/UX Design',
       description: isFrench ? 'Design d\'interfaces utilisateur intuitives et attrayantes' : 'Intuitive and attractive user interface design',
-      image: '/api/placeholder/400/300'
+      image: '/images/devops.jpg'
     },
     {
       title: isFrench ? 'Maintenance' : 'Maintenance',
       description: isFrench ? 'Maintenance et support technique pour vos applications' : 'Maintenance and technical support for your applications',
-      image: '/api/placeholder/400/300'
+      image: '/images/maintenance.jpg'
     },
     {
       title: isFrench ? 'E-commerce' : 'E-commerce',
       description: isFrench ? 'Solutions e-commerce sur mesure pour votre business' : 'Custom e-commerce solutions for your business',
-      image: '/api/placeholder/400/300'
+      image: '/images/erh.jpeg'
     },
     {
       title: isFrench ? 'API Development' : 'API Development',
       description: isFrench ? 'Création d\'APIs RESTful et GraphQL robustes' : 'Creating robust RESTful and GraphQL APIs',
-      image: '/api/placeholder/400/300'
+      image: '/images/API.jpg'
     },
     {
       title: isFrench ? 'Optimisation SEO' : 'SEO Optimization',
       description: isFrench ? 'Optimisation pour les moteurs de recherche' : 'Search engine optimization',
-      image: '/api/placeholder/400/300'
+      image: '/images/SEO.jpg'
     }
   ]
 
